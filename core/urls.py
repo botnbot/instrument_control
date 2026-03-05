@@ -39,7 +39,7 @@ urlpatterns = [
     path('instruments/<int:pk>/delete/', InstrumentsDeleteView.as_view(), name='instrument_delete'),
 
     path('repairers/', RepairersListView.as_view(), name='repairers_list'),
-    path('repairers/create/', RepairersCreateView.as_view(), name='repairers_create'),
+    path('repairers/create', RepairersCreateView.as_view(), name='repairers_create'),
     # path('repairers/<int:pk>/', RepairersDetailView.as_view(), name='repairers_detail'),
     # path('repairers/<int:pk>/update/', RepairersUpdateView.as_view(), name='repairers_update'),
     # path('repairers/<int:pk>/delete/', RepairersDeleteView.as_view(), name='repairers_delete'),
