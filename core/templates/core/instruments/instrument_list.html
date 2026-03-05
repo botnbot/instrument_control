@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Список инструмента{% endblock %}
+
+
+{% block content %}
+
+<h1>Список инструмента</h1>
+{% if instruments %}
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Наименование</th>
+        <th scope="col">Дата ввода</th>
+        <th scope="col">Цена</th>
+        <th scope="col">Комментарий</th>
+        <th scope="col">Статус</th>
+        <th scope="col">Фото</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for instrument in instruments %}
+    <tr>
+        <td>{{ instrument.id }}</td>
+        <td>{{ instrument.name }}</td>
+        <td>{{ instrument.entry_date }}</td>
+        <td>{{ instrument.price }}</td>
+        <td>{{ instrument.comment }}</td>
+        <td>{{ instrument.status }}</td>
+        <td> {% if instrument.image1 %}
+            <img src='{{instrument.image1.url}}' width='100'>
+            {%endif%}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Нет инструмента</p>
+{% endif %}
+
+<a href="{% url 'core:instrument_list' %}" class="btn btn-secondary">На главную</a>
+<a href="{% url 'core:instrument_list' %}" class="btn btn-secondary">На главную</a>
+{% endblock %}
