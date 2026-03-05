@@ -47,7 +47,7 @@ class RepairersCreateView(CreateView):
     model = Repairers
     form_class = RepairersForm
     success_url = reverse_lazy('core:repairers_list')
-    template_name = 'core/repairers/repairers_form.html'
+    template_name = 'core:repairers/repairers_form.html'
     context_object_name = 'repairer'
 
 
@@ -60,11 +60,13 @@ class RepairsCreateView(CreateView):
 
 class RepairersListView(ListView):
     model = Repairers
-    template_name = 'core/repairers/repairers_form.html'
+    template_name = 'core/repairers/repairer_list.html'
     context_object_name = 'repairers'
+
 
 class RepairsListView(ListView):
     model = Repairs
+    template_name = 'core/repairs/repair_list.html'
     context_object_name = 'repairs'
 
 
