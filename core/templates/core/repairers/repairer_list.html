@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Список ремонтников{% endblock %}
+
+
+{% block content %}
+
+<h1>Список ремонтников</h1>
+{% if repairers %}
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Название</th>
+        <th scope="col">Адрес</th>
+        <th scope="col">Телефон</th>
+        <th scope="col">Контактное лицо</th>
+        <th scope="col">Email</th>
+        <th scope="col">Коментарий</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for repairer in repairers %}
+    <tr>
+        <td>{{ repairer.id }}</td>
+        <td>{{ repairer.name }}</td>
+        <td>{{ repairer.address }}</td>
+        <td>{{ repairer.phone }}</td>
+        <td>{{ repairer.contact_person }}</td>
+        <td>{{ repairer.email }}</td>
+        <td> {{ repairer.comment }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Нет ремонтников</p>
+{% endif %}
+
+<a href="{% url 'core:instrument_list' %}" class="btn btn-secondary">На главную</a>
+{% endblock %}
