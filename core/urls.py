@@ -36,10 +36,11 @@ app_name = 'core'
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
 
+
     path('instruments/', InstrumentsListView.as_view(), name='instrument_list'),
     path('instruments/create/', InstrumentsCreateView.as_view(), name='instrument_create'),
     path('instruments/<int:pk>/', InstrumentsDetailView.as_view(), name='instrument_detail'),
-    path('instruments/<int:pk>/update/', InstrumentsUpdateView.as_view(), name='instrument_update'),
+    path('instruments/<int:pk>/update/', InstrumentsUpdateView.as_view(), name='instrument_edit'),
     path('instruments/<int:pk>/delete/', InstrumentsDeleteView.as_view(), name='instrument_delete'),
 
     path('repairers/', RepairersListView.as_view(), name='repairers_list'),
