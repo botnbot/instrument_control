@@ -21,6 +21,12 @@ class Instruments(models.Model):
         (STATUS_BROKEN, "сломан"),
     ]
     name = models.CharField(max_length=100, verbose_name="Наименование")
+    inventory_N = models.IntegerField(
+        unique=True,
+        null=True,
+        blank=True,
+        verbose_name="Инвентарный номер",
+    )
     entry_date = models.DateField(verbose_name="Дата ввода")
     price = models.DecimalField(decimal_places=2, max_digits=8, verbose_name="Цена")
     is_new=models.BooleanField(default=True)
