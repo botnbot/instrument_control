@@ -17,11 +17,14 @@ Including another URLconf
 from django.urls import path
 
 from core.views import (
+    HomeView,
+
     InstrumentsListView,
     InstrumentsCreateView,
     InstrumentsDetailView,
     InstrumentsUpdateView,
     InstrumentsDeleteView,
+
     RepairersCreateView,
     RepairsCreateView,
     RepairsListView,
@@ -30,8 +33,9 @@ from core.views import (
 
 app_name = 'core'
 
-
 urlpatterns = [
+    path('', HomeView.as_view(), name='home'),
+
     path('instruments/', InstrumentsListView.as_view(), name='instrument_list'),
     path('instruments/create/', InstrumentsCreateView.as_view(), name='instrument_create'),
     path('instruments/<int:pk>/', InstrumentsDetailView.as_view(), name='instrument_detail'),
