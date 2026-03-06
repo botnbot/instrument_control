@@ -11,20 +11,24 @@
     <tr>
         <th scope="col">ID</th>
         <th scope="col">Наименование</th>
+        <th scope="col">Инвентарный №</th>
         <th scope="col">Дата ввода</th>
         <th scope="col">Цена</th>
         <th scope="col">Комментарий</th>
         <th scope="col">Статус</th>
         <th scope="col">Фото</th>
+        <th scope="col">Действие</th>
     </tr>
     </thead>
     <tbody>
     {% for instrument in instruments %}
     <tr>
         <td>{{ instrument.id }}</td>
-        <td><a href="{% url 'core:instrument_edit' instrument.id %}" class="info-table-link">
-        {{ instrument.name }}
-        </a></td>
+        <td><a href="{% url 'core:instrument_detail' instrument.id %}" class="info-table-link">
+            {{ instrument.name}}
+        </a>
+        </td>
+        <td>{{ instrument.inventory_N }}</td>
         <td>{{ instrument.entry_date }}</td>
         <td>{{ instrument.price }}</td>
         <td>{{ instrument.comment }}</td>
@@ -33,7 +37,7 @@
             <img src='{{instrument.image1.url}}' width='100'>
             {%endif%}
         </td>
-        <td><a href="{% url 'core:instrument_list' %}" class="btn btn-danger">Списать</a></td>
+        <td><a href="{% url 'core:instrument_delete' instrument.pk %}" class="btn btn-danger">Списать</a></td>
     </tr>
     {% endfor %}
     </tbody>
