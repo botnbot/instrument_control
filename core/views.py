@@ -3,6 +3,12 @@ from django.views.generic import CreateView, DetailView, UpdateView, ListView, D
 
 from .forms import InstrumentsForm, RepairersForm, RepairsForm
 from .models import Instruments, Repairers, Repairs
+from django.views.generic import TemplateView
+
+
+class HomeView(TemplateView):
+    template_name = "home.html/"
+
 
 
 class InstrumentsCreateView(CreateView):
