@@ -7,7 +7,7 @@ from django.views.generic import TemplateView
 
 
 class HomeView(TemplateView):
-    template_name = "home.html/"
+    template_name = "home.html"
 
 
 
@@ -15,27 +15,26 @@ class InstrumentsCreateView(CreateView):
     model = Instruments
     form_class = InstrumentsForm
     template_name = 'core/instruments/instruments_form.html'
-    success_url = reverse_lazy('core:instrument_list')
+    success_url = reverse_lazy("core:instrument")
     context_object_name = 'instrument'
 
 
 class InstrumentsDetailView(DetailView):
     model = Instruments
-    form = InstrumentsForm
+    template_name = "core/instruments/detail.html"
     context_object_name = 'instrument'
 
 
 class InstrumentsListView(ListView):
     model = Instruments
     template_name = 'core/instruments/instrument_list.html'
-    form = InstrumentsForm
     context_object_name = 'instruments'
 
 
 class InstrumentsUpdateView(UpdateView):
     model = Instruments
-    context_object_name = 'instrument'
-    fields = ['name', 'image1', 'image2', 'image3','comment']
+    form_class = InstrumentsForm
+    template_name = 'core/instruments/instruments_form.html'
 
     def get_success_url(self):
         return reverse_lazy('core:instrument_detail', kwargs={'pk': self.object.pk})
@@ -43,9 +42,7 @@ class InstrumentsUpdateView(UpdateView):
 
 class InstrumentsDeleteView(DeleteView):
     model = Instruments
-    context_object_name = 'instrument'
-    fields = ['pk', 'name',]
-    # template_name = "core/instrument/instrument_confirm_delete.html"
+    template_name = 'core/instruments/instruments_confirm_delete.html'
     success_url = reverse_lazy("core:instrument_list")
 
 
