@@ -2,12 +2,46 @@
 
 {% block content %}
 
-<h1>Instrument</h1>
+<h1>Инструмент: {{ object.name }}</h1>
 
-<p>ID: {{ object.id }}</p>
-
-<a href="{% url 'core:instrument_edit' object.id %}">Edit</a>
+<table>
+    <tr>
+        <th>ID</th>
+        <td>{{ object.id }}</td>
+    </tr>
+    <tr>
+        <th>Наименование</th>
+        <td>{{ object.name }}</td>
+    </tr>
+    <tr>
+        <th>Инвентарный №</th>
+        <td>{{ object.inventory_N }}</td>
+    </tr>
+    <tr>
+        <th>Дата поступления</th>
+        <td>{{ object.entry_date }}</td>
+    </tr>
+    <tr>
+        <th>Цена</th>
+        <td>{{ object.price }}</td>
+    </tr>
+    <tr>
+        <th>Комментарий</th>
+        <td>{{ object.comment }}</td>
+    </tr>
+    <tr>
+        <th>Статус</th>
+        <td>{{ object.status }}</td>
+    </tr>
+    {% if object.image1 %}
+    <tr>
+        <th>Фото</th>
+        <td><img src="{{ object.image1.url }}" width="200" alt="Фото инструмента"></td>
+    </tr>
+    {% endif %}
+</table>
 <br>
-<a href="{% url 'core:instrument_list' %}">Back</a>
+<a href="{% url 'core:instrument_edit' object.id %}" class="btn btn-primary">Редактировать</a>
+<a href="{% url 'core:instrument_list' %}" class="btn btn-secondary">Вернуться к списку</a>
 
 {% endblock %}
