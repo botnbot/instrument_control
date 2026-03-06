@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Instrument</h1>
+
+<p>ID: {{ object.id }}</p>
+
+<a href="{% url 'core:instrument_edit' object.id %}">Edit</a>
+<br>
+<a href="{% url 'core:instrument_list' %}">Back</a>
+
+{% endblock %}
