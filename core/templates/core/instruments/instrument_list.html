@@ -22,7 +22,9 @@
     {% for instrument in instruments %}
     <tr>
         <td>{{ instrument.id }}</td>
-        <td>{{ instrument.name }}</td>
+        <td><a href="{% url 'core:instrument_edit' instrument.id %}" class="info-table-link">
+        {{ instrument.name }}
+        </a></td>
         <td>{{ instrument.entry_date }}</td>
         <td>{{ instrument.price }}</td>
         <td>{{ instrument.comment }}</td>
@@ -41,4 +43,5 @@
 {% endif %}
 
 <a href="{% url 'core:instrument_list' %}" class="btn btn-secondary">На главную</a>
+<a href="{% url 'core:instrument_create' %}" class="btn btn-primary">Добавить</a>
 {% endblock %}
