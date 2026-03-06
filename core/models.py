@@ -1,7 +1,5 @@
-
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import PROTECT, ForeignKey
 from django.db.models import CASCADE
 
 
@@ -29,7 +27,7 @@ class Instruments(models.Model):
     )
     entry_date = models.DateField(verbose_name="Дата ввода")
     price = models.DecimalField(decimal_places=2, max_digits=8, verbose_name="Цена")
-    is_new=models.BooleanField(default=True)
+    is_new = models.BooleanField(default=True)
     image1 = models.ImageField(upload_to="instruments/foto", verbose_name="Фото инструмента1")
     image2 = models.ImageField(upload_to="instruments/foto", verbose_name="Фото инструмента2", blank=True)
     image3 = models.ImageField(upload_to="instruments/foto", verbose_name="Фото инструмента3", blank=True)
@@ -53,10 +51,11 @@ class Repairers(models.Model):
 
 
 class Repairs(models.Model):
-
-    instrument = models.ForeignKey(Instruments, on_delete=models.CASCADE, related_name='repairs', verbose_name='инструмент', null=True,
-    blank=True)
-    repairer = models.ForeignKey(Repairers, on_delete=models.PROTECT, related_name='repair_done', verbose_name='исполнитель')
+    instrument = models.ForeignKey(Instruments, on_delete=models.CASCADE, related_name='repairs',
+                                   verbose_name='инструмент', null=True,
+                                   blank=True)
+    repairer = models.ForeignKey(Repairers, on_delete=models.PROTECT, related_name='repair_done',
+                                 verbose_name='исполнитель')
     failure_date = models.DateField(verbose_name='Дата поломки')
     date_of_delivery_for_repair = models.DateField(verbose_name="Дата сдачи в ремонт")
     date_of_receipt_from_repair = models.DateField(blank=True, null=True, verbose_name="Дата получения из ремонта")
@@ -70,16 +69,15 @@ class Repairs(models.Model):
         return None
 
 
-
 class Relocator(models.Model):
     pass
 
 
 class Relocations(models.Model):
     instrument = models.ForeignKey(Instruments, on_delete=CASCADE, related_name='relocations')
-    comment = models.CharField(max_length=255)
+    comment = models.TextField()
     date = models.DateField(auto_now_add=True)
 
     def clean(self):
-        if self.instrument.status == "relocated" and not self.comment:
+        if self.instrument.status == Instruments.STATUS_RELOCATED and not self.comment:
             raise ValidationError("Нужно указать комментарий для перемещенного инструмента")
