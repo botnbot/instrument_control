@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Удаление мастерской
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h1 class="mb-4">Удалить ремонтника</h1>
+    <p>Вы уверены, что хотите удалить "{{ object.name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">
+            Удалить
+        </button>
+        <a href="{% url 'core:repairer_list' %}" class="btn btn-secondary">
+            Отмена
+        </a>
+    </form>
+</div>
+{% endblock %}
