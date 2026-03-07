@@ -28,6 +28,7 @@
         <td>{{ repairer.contact_person }}</td>
         <td>{{ repairer.email }}</td>
         <td> {{ repairer.comment }}</td>
+        <td> <td><a href="{% url 'core:repairer_delete' repairer.pk %}" class="btn btn-danger">Удалить</a></td>
     </tr>
     {% endfor %}
     </tbody>
@@ -36,5 +37,6 @@
 <p>Нет ремонтников</p>
 {% endif %}
 
-<a href="{% url 'core:instrument_list' %}" class="btn btn-secondary">На главную</a>
+<a href="{% url 'core:repairer_list' %}" class="btn btn-secondary">На главную</a>
+<a href="{% url 'core:repairer_create' %}" class="btn btn-primary">Добавить</a>
 {% endblock %}
