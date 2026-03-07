@@ -37,7 +37,8 @@
             <img src='{{instrument.image1.url}}' width='100'>
             {%endif%}
         </td>
-        <td><a href="{% url 'core:instrument_delete' instrument.pk %}" class="btn btn-danger">Списать</a></td>
+        <td><a href="{% url 'core:instrument_delete' instrument.pk %}" class="btn btn-danger">Списать</a>
+        </td>
     </tr>
     {% endfor %}
     </tbody>
