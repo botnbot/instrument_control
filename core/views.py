@@ -15,8 +15,7 @@ class InstrumentsCreateView(CreateView):
     model = Instruments
     form_class = InstrumentsForm
     template_name = 'core/instruments/instruments_form.html'
-    success_url = reverse_lazy("core:instrument")
-    context_object_name = 'instrument'
+    success_url = reverse_lazy("core:instrument_list")
 
 
 class InstrumentsDetailView(DetailView):
@@ -49,16 +48,14 @@ class InstrumentsDeleteView(DeleteView):
 class RepairersCreateView(CreateView):
     model = Repairers
     form_class = RepairersForm
-    success_url = reverse_lazy('core:repairers_list')
-    template_name = 'core:repairers/repairers_form.html'
+    template_name = 'core/repairers/repairers_form.html'
+    success_url = reverse_lazy('core:repairer_list')
+
+
+class RepairersDetailView(DetailView):
+    model = Repairers
+    template_name = "core/repairers/detail.html"
     context_object_name = 'repairer'
-
-
-class RepairsCreateView(CreateView):
-    model = Repairs
-    form_class = RepairsForm
-    success_url = reverse_lazy('core:repairers_list')
-    context_object_name = 'repair'
 
 
 class RepairersListView(ListView):
@@ -67,9 +64,30 @@ class RepairersListView(ListView):
     context_object_name = 'repairers'
 
 
+class RepairersUpdateView(UpdateView):
+    model = Repairers
+    form_class = RepairersForm
+    template_name = 'core/repairers/repairers_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('core:repairer_detail', kwargs={'pk': self.object.pk})
+
+
+class  RepairersDeleteView(DeleteView):
+    model = Repairers
+    template_name = 'core/repairers/repairer_confirm_delete.html'
+    success_url = reverse_lazy("core:repairer_list")
+
+
+class RepairsCreateView(CreateView):
+    model = Repairs
+    form_class = RepairsForm
+    template_name = 'core:repairs/repairs_form.html'
+    success_url = reverse_lazy('core:repairs_list')
+    context_object_name = 'repair'
+
+
 class RepairsListView(ListView):
     model = Repairs
-    template_name = 'core/repairs/repair_list.html'
+    template_name = 'core/repairs/repairs_list.html'
     context_object_name = 'repairs'
-
-
