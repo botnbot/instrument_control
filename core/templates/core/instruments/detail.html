@@ -42,6 +42,7 @@
 </table>
 <br>
 <a href="{% url 'core:instrument_edit' object.id %}" class="btn btn-primary">Редактировать</a>
+<a href="{% url 'core:repair_create' %}" class="btn btn-primary">Отправить в ремонт</a>
 <a href="{% url 'core:instrument_list' %}" class="btn btn-secondary">Вернуться к списку</a>
 
 {% endblock %}
