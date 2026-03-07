@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Мастерская: {{ object.name }}</h1>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <td>{{ object.id }}</td>
+    </tr>
+    <tr>
+        <th>Наименование</th>
+        <td>{{ object.name }}</td>
+    </tr>
+    <tr>
+        <th>Адрес</th>
+        <td>{{ object.address}}</td>
+    </tr>
+    <tr>
+        <th>Телефон</th>
+        <td>{{ object.phone }}</td>
+    </tr>
+    <tr>
+        <th>Контактное</th>
+        <td>{{ object.contact_person }}</td>
+    </tr>
+    <tr>
+        <th>email</th>
+        <td>{{ object.email }}</td>
+    </tr>
+    <tr>
+        <th>Комментарий</th>
+        <td>{{ object.comment }}</td>
+    </tr>
+</table>
+<br>
+<a href="{% url 'core:repairer_edit' object.id %}" class="btn btn-primary">Редактировать</a>
+<a href="{% url 'core:repairer_edit' object.id %}" class="btn btn-danger">Удалить</a>
+<a href="{% url 'core:repairer_list' %}" class="btn btn-secondary">Вернуться к списку</a>
+
+{% endblock %}
