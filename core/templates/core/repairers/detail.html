@@ -2,31 +2,27 @@
 
 {% block content %}
 
-<h1>Мастерская: {{ object.name }}</h1>
+<h1>Сервис: {{ object.name }}</h1>
 
-<table>
-    <tr>
-        <th>ID</th>
-        <td>{{ object.id }}</td>
-    </tr>
+<table class="table table-bordered table-striped">
     <tr>
         <th>Наименование</th>
         <td>{{ object.name }}</td>
     </tr>
     <tr>
         <th>Адрес</th>
-        <td>{{ object.address}}</td>
+        <td>{{ object.address }}</td>
     </tr>
     <tr>
         <th>Телефон</th>
-        <td>{{ object.phone }}</td>
+        <td>{{ object.phone}}</td>
     </tr>
     <tr>
-        <th>Контактное</th>
+        <th>Контактное лицо</th>
         <td>{{ object.contact_person }}</td>
     </tr>
     <tr>
-        <th>email</th>
+        <th>Email</th>
         <td>{{ object.email }}</td>
     </tr>
     <tr>
@@ -35,8 +31,8 @@
     </tr>
 </table>
 <br>
-<a href="{% url 'core:repairer_edit' object.id %}" class="btn btn-primary">Редактировать</a>
-<a href="{% url 'core:repairer_edit' object.id %}" class="btn btn-danger">Удалить</a>
+<a href="{% url 'core:repairer_update' object.pk %}" class="btn btn-primary">Редактировать</a>
+<a href="{% url 'core:repairer_delete' object.pk %}" class="btn btn-danger">Удалить</a>
 <a href="{% url 'core:repairer_list' %}" class="btn btn-secondary">Вернуться к списку</a>
 
 {% endblock %}
