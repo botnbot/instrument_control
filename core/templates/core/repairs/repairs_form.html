@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+Ремонты
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>
+        {% if object %}
+        Edit Repair
+        {% else %}
+        Create Repair
+        {% endif %}
+    </h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">
+            Save
+        </button>
+        <a href="{% url 'core:repair_list' %}" class="btn btn-secondary">
+            Cancel
+        </a>
+    </form>
+</div>
+{% endblock %}
