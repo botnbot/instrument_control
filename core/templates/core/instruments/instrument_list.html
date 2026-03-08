@@ -7,7 +7,7 @@
 <h2>Список инструментов</h2>
 
 {% if instruments %}
-<table class="table table-striped table-hover">
+<table class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
         <th>ID</th>
@@ -34,7 +34,7 @@
         </a>
 
         </td>
-        <td>{{ instrument.inventory_N }}</td>
+        <td>{{ instrument.inventory_number }}</td>
         <td>{{ instrument.entry_date }}</td>
         <td>{{ instrument.price }}</td>
         <td>{{ instrument.comment }}</td>
