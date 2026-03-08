@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, ListView, DeleteView
 
@@ -10,7 +11,7 @@ class HomeView(TemplateView):
     template_name = "home.html"
 
 
-
+# ________________________________Instruments_____________________________________________
 class InstrumentsCreateView(CreateView):
     model = Instruments
     form_class = InstrumentsForm
@@ -28,6 +29,17 @@ class InstrumentsListView(ListView):
     model = Instruments
     template_name = 'core/instruments/instrument_list.html'
     context_object_name = 'instruments'
+    paginate_by = 10
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        search_query = self.request.GET.get('q', '').strip()
+        if search_query:
+            qs = qs.filter(
+                Q(name__icontains=search_query )|
+                Q(inventory_number__icontains=search_query)
+                           )
+        return qs
 
 
 class InstrumentsUpdateView(UpdateView):
@@ -45,6 +57,7 @@ class InstrumentsDeleteView(DeleteView):
     success_url = reverse_lazy("core:instrument_list")
 
 
+# ________________________________Repairers_____________________________________________
 class RepairersCreateView(CreateView):
     model = Repairers
     form_class = RepairersForm
@@ -62,6 +75,7 @@ class RepairersListView(ListView):
     model = Repairers
     template_name = 'core/repairers/repairer_list.html'
     context_object_name = 'repairers'
+    paginate_by = 10
 
 
 class RepairersUpdateView(UpdateView):
@@ -79,15 +93,38 @@ class  RepairersDeleteView(DeleteView):
     success_url = reverse_lazy("core:repairer_list")
 
 
+# ________________________________Repairs____________________________________________
 class RepairsCreateView(CreateView):
     model = Repairs
     form_class = RepairsForm
-    template_name = 'core:repairs/repairs_form.html'
-    success_url = reverse_lazy('core:repairs_list')
+    template_name = 'core/repairs/repairs_form.html'
+    success_url = reverse_lazy('core:repair_list')
     context_object_name = 'repair'
+
+
+class RepairsDetailView(DetailView):
+    model = Repairs
+    template_name = "core/repairs/detail.html"
+    context_object_name = 'repairs'
 
 
 class RepairsListView(ListView):
     model = Repairs
-    template_name = 'core/repairs/repairs_list.html'
+    template_name = 'core/repairs/repair_list.html'
     context_object_name = 'repairs'
+    paginate_by = 10
+
+
+class RepairsUpdateView(UpdateView):
+    model = Repairs
+    form_class = RepairsForm
+    template_name = 'core/repairs/repairs_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('core:repair_detail', kwargs={'pk': self.object.pk})
+
+
+class RepairsDeleteView(DeleteView):
+    model = Repairs
+    template_name = 'core/repairs/repair_confirm_delete.html'
+    success_url = reverse_lazy("core:repair_list")
