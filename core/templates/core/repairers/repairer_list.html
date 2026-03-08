@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}Список ремонтников{% endblock %}
+{% block title %}Список сервисов{% endblock %}
 
 
 {% block content %}
 
-<h1>Список ремонтников</h1>
+<h1>Список сервисов</h1>
 {% if repairers %}
-<table class="table table-striped table table-bordered">
+<table class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
         <th scope="col">ID</th>
@@ -21,14 +21,14 @@
     <tbody>
     {% for repairer in repairers %}
     <tr>
-        <td>{{ repairer.id }}</td>
+        <td>{{ repairer.pk }}</td>
         <td> <a href="{% url 'core:repairer_detail' repairer.id %}" class="info-table-link">{{ repairer.name }}</a></td>
         <td>{{ repairer.address }}</td>
         <td>{{ repairer.phone }}</td>
         <td>{{ repairer.contact_person }}</td>
         <td>{{ repairer.email }}</td>
         <td> {{ repairer.comment }}</td>
-        <td> <td><a href="{% url 'core:repairer_delete' repairer.pk %}" class="btn btn-danger">Удалить</a></td>
+        <td> <a href="{% url 'core:repairer_delete' repairer.pk %}" class="btn btn-danger">Удалить</a></td>
     </tr>
     {% endfor %}
     </tbody>
@@ -54,7 +54,7 @@
 </nav>
 {% endif %}
 {% else %}
-<p>Нет ремонтников</p>
+<p>Нет сервисов</p>
 {% endif %}
 
 <a href="{% url 'core:repairer_list' %}" class="btn btn-secondary">На главную</a>

@@ -19,7 +19,7 @@ class Instruments(models.Model):
         (STATUS_BROKEN, "сломан"),
     ]
     name = models.CharField(max_length=100, verbose_name="Наименование")
-    inventory_N = models.IntegerField(
+    inventory_number = models.IntegerField(
         unique=True,
         null=True,
         blank=True,

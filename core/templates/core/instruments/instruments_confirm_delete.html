@@ -5,7 +5,7 @@
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">Удалить инструмент</h1>
-        <p>Вы уверены, что хотите удалить "{{ instruments.name }} инв№{{ instruments.inventory_N }}"?</p>
+        <p>Вы уверены, что хотите удалить "{{ instruments.name }} инв№{{ instruments.inventory_number }}"?</p>
         <form method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Удалить</button>
