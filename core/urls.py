@@ -28,9 +28,14 @@ from core.views import (
     RepairersCreateView,
     RepairersListView,
     RepairersDetailView,
+    RepairersUpdateView,
+    RepairersDeleteView,
 
     RepairsCreateView,
-    RepairsListView, RepairersUpdateView, RepairersDeleteView,
+    RepairsListView,
+    RepairsDetailView,
+    RepairsUpdateView,
+    RepairsDeleteView,
 )
 
 app_name = 'core'
@@ -45,14 +50,14 @@ urlpatterns = [
     path('instruments/<int:pk>/delete/', InstrumentsDeleteView.as_view(), name='instrument_delete'),
 
     path('repairers/', RepairersListView.as_view(), name='repairer_list'),
-    path('repairers/create', RepairersCreateView.as_view(), name='repairer_create'),
+    path('repairers/create/', RepairersCreateView.as_view(), name='repairer_create'),
     path('repairers/<int:pk>/', RepairersDetailView.as_view(), name='repairer_detail'),
     path('repairers/<int:pk>/update/', RepairersUpdateView.as_view(), name='repairer_update'),
     path('repairers/<int:pk>/delete/', RepairersDeleteView.as_view(), name='repairer_delete'),
 
-    path('repairs/', RepairsListView.as_view(), name='repairs_list'),
-    path('repairs/create/', RepairsCreateView.as_view(), name='repairs_create'),
-    # path('repairs/<int:pk>/', RepairsDetailView.as_view(), name='repairs_detail'),
-    # path('repairs/<int:pk>/update/', RepairsUpdateView.as_view(), name='repairs_update'),
-    # path('repairs/<int:pk>/delete/', RepairsDeleteView.as_view(), name='repairs_delete'),
+    path('repairs/', RepairsListView.as_view(), name='repair_list'),
+    path('repairs/create/', RepairsCreateView.as_view(), name='repair_create'),
+    path('repairs/<int:pk>/', RepairsDetailView.as_view(), name='repair_detail'),
+    path('repairs/<int:pk>/update/', RepairsUpdateView.as_view(), name='repair_update'),
+    path('repairs/<int:pk>/delete/', RepairsDeleteView.as_view(), name='repair_delete'),
 ]
