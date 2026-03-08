@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name="instruments",
-            name="inventory_N",
+            name="inventory_number",
             field=models.IntegerField(
                 blank=True, null=True, unique=True, verbose_name="Инвентарный номер"
             ),
