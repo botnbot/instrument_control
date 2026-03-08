@@ -6,30 +6,35 @@
 
 <h1>Список ремонтов</h1>
 {% if repairs %}
-<table class="table table-striped table table-bordered">
+<table class="table table-striped table-bordered">
     <thead>
     <tr>
         <th scope="col">ID</th>
         <th scope="col">Наименование инструмента</th>
         <th scope="col">Исполнитель</th>
         <th scope="col">Дата поломки</th>
-        <th scope="col">Дата доставки в ремонт</th>
+        <th scope="col">Дата сдачи в ремонт</th>
         <th scope="col">Дата получения из ремонта</th>
         <th scope="col">Стоимость ремонта</th>
-        <th scope="col">Коментарий</th>
+        <th scope="col">Комментарий</th>
     </tr>
     </thead>
     <tbody>
     {% for repair in repairs %}
     <tr>
         <td>{{ repair.id }}</td>
-        <td>{{ repair.instrument }}</td>
-        <td>{{ repair.repairer }}</td>
+        <td><a href="{% url 'core:instrument_detail' repair.instrument.pk %}" class="info-table-link">{{ repair.instrument }}</a></td>
+        <td><a href="{% url 'core:repairer_detail' repair.repairer.pk %}" class="info-table-link">{{ repair.repairer }}</a></td>
         <td>{{ repair.failure_date }}</td>
         <td>{{ repair.date_of_delivery_for_repair }}</td>
         <td>{{ repair.date_of_receipt_from_repair }}</td>
         <td> {{ repair.repair_cost }}</td>
         <td> {{ repair.comment }}</td>
+        <td>
+            <a href="{% url 'core:repair_delete' repair.pk %}" class="btn btn-danger">
+                Удалить
+            </a>
+        </td>
     </tr>
     {% endfor %}
     </tbody>
@@ -39,4 +44,5 @@
 {% endif %}
 
 <a href="{% url 'core:instrument_list' %}" class="btn btn-secondary">На главную</a>
+<a href="{% url 'core:repair_create' %}" class="btn btn-primary">Отправить в ремонт</a>
 {% endblock %}
