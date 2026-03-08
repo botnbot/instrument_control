@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Ремонт №{{ object.id }}</h1>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Номер</th>
+        <td>{{ object.id }}</td>
+    </tr>
+    <tr>
+        <th>Инструмент</th>
+        <td>{{ object.instrument }}</td>
+    </tr>
+    <tr>
+        <th>Исполнитель</th>
+        <td>{{ object.repairer}}</td>
+    </tr>
+    <tr>
+        <th>Дата выхода из строя</th>
+        <td>{{ object.failure_date }}</td>
+    </tr>
+    <tr>
+        <th>Дата доставки в ремонт</th>
+        <td>{{ object.date_of_delivery_for_repair }}</td>
+    </tr>
+    <tr>
+        <th>Дата получения из ремонта</th>
+        <td>{{ object.date_of_receipt_from_repair }}</td>
+    </tr>
+    <tr>
+        <th>Стоимость ремонта</th>
+        <td>{{ object.repair_cost }}</td>
+    </tr>
+    <tr>
+        <th>Комментарий</th>
+        <td>{{ object.comment }}</td>
+    </tr>
+</table>
+<br>
+<a href="{% url 'core:repair_update' object.id %}" class="btn btn-primary">Редактировать</a>
+<a href="{% url 'core:repair_delete' object.id %}" class="btn btn-danger">Удалить</a>
+<a href="{% url 'core:repair_list' %}" class="btn btn-secondary">Вернуться к списку</a>
+
+{% endblock %}
