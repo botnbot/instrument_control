@@ -45,8 +45,11 @@
             {% endif %}
         </td>
         <td>
-            <a href="{% url 'core:instrument_delete' instrument.id %}" class="btn btn-danger btn-sm">
+            <a href="{% url 'core:instrument_delete' instrument.pk %}" class="btn btn-danger btn-sm">
                 Списать
+            </a>
+            <a href="{% url 'core:repair_send' instrument.pk %}" class="btn btn-primary btn-sm">
+                Сдать в ремонт
             </a>
         </td>
     </tr>
