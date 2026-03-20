@@ -8,13 +8,13 @@ from django.db.models import CASCADE
 
 class Instruments(models.Model):
     STATUS_IN_USE = 'IN_USE'
-    STATUS_REPAIRED = 'REPAIRED'
+    STATUS_IN_REPAIR = 'IN_REPAIR'
     STATUS_RELOCATED = 'RELOCATED'
     STATUS_BROKEN = 'BROKEN'
 
     STATUS_CHOICES = [
         (STATUS_IN_USE, "в работе"),
-        (STATUS_REPAIRED, "в ремонте"),
+        (STATUS_IN_REPAIR, "в ремонте"),
         (STATUS_RELOCATED, "перемещен"),
         (STATUS_BROKEN, "сломан"),
     ]
@@ -35,7 +35,7 @@ class Instruments(models.Model):
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default=STATUS_IN_USE)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.inventory_number})"
 
 
 class Repairers(models.Model):
@@ -54,12 +54,13 @@ class Repairs(models.Model):
     instrument = models.ForeignKey(Instruments, on_delete=models.CASCADE, related_name='repairs',
                                    verbose_name='инструмент', null=True,
                                    blank=True)
-    repairer = models.ForeignKey(Repairers, on_delete=models.PROTECT, related_name='repair_done',
+    repairer = models.ForeignKey(Repairers, on_delete=models.CASCADE, related_name='repair_done',
                                  verbose_name='исполнитель')
     failure_date = models.DateField(verbose_name='Дата поломки')
     date_of_delivery_for_repair = models.DateField(verbose_name="Дата сдачи в ремонт")
     date_of_receipt_from_repair = models.DateField(blank=True, null=True, verbose_name="Дата получения из ремонта")
-    repair_cost = models.DecimalField(decimal_places=2, max_digits=10, verbose_name="Стоимость ремонта")
+    repair_cost = models.DecimalField(decimal_places=2, max_digits=10, verbose_name="Стоимость ремонта",
+                                      null=True, blank=True)
     comment = models.TextField(verbose_name="Комментарий")
 
     @property
@@ -67,6 +68,9 @@ class Repairs(models.Model):
         if self.date_of_receipt_from_repair:
             return (self.date_of_receipt_from_repair - self.date_of_delivery_for_repair).days
         return None
+
+    class Meta:
+        ordering = ['-date_of_delivery_for_repair']
 
 
 class Relocator(models.Model):
