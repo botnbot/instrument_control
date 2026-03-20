@@ -1,5 +1,6 @@
 from django.db.models import Q
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic import CreateView, DetailView, UpdateView, ListView, DeleteView
 
 from .forms import InstrumentsForm, RepairersForm, RepairsForm
@@ -128,3 +129,17 @@ class RepairsDeleteView(DeleteView):
     model = Repairs
     template_name = 'core/repairs/repair_confirm_delete.html'
     success_url = reverse_lazy("core:repair_list")
+
+
+class SendForRepairView(CreateView):
+    model = Repairs
+    fields = ["repairer", "comment", "failure_date"]
+    template_name = "core/repairs/send_for_repair.html"
+    success_url = reverse_lazy("core:repair_list")
+
+    def form_valid(self, form):
+        instrument = Instruments.objects.get(pk=self.kwargs["pk"])
+        form.instance.instrument = instrument
+        form.instance.date_of_delivery_for_repair = timezone.now().date()
+        return super().form_valid(form)
+
