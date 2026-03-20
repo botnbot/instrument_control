@@ -36,6 +36,7 @@ from core.views import (
     RepairsDetailView,
     RepairsUpdateView,
     RepairsDeleteView,
+    SendForRepairView,
 )
 
 app_name = 'core'
@@ -60,4 +61,5 @@ urlpatterns = [
     path('repairs/<int:pk>/', RepairsDetailView.as_view(), name='repair_detail'),
     path('repairs/<int:pk>/update/', RepairsUpdateView.as_view(), name='repair_update'),
     path('repairs/<int:pk>/delete/', RepairsDeleteView.as_view(), name='repair_delete'),
+    path('repairs/<int:pk>/send/', SendForRepairView.as_view(), name='repair_send'),
 ]
