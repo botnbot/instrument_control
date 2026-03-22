@@ -1,6 +1,7 @@
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.utils import timezone
+from django.utils.timezone import localdate
 from django.views.generic import CreateView, DetailView, UpdateView, ListView, DeleteView
 
 from .forms import InstrumentsForm, RepairersForm, RepairsForm
@@ -124,6 +125,14 @@ class RepairsUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('core:repair_detail', kwargs={'pk': self.object.pk})
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        if self.object.date_of_receipt_from_repair:
+            instrument = self.object.instrument
+            instrument.mark_as_active()
+        return response
+
 
 class RepairsDeleteView(DeleteView):
     model = Repairs
@@ -138,8 +147,14 @@ class SendForRepairView(CreateView):
     success_url = reverse_lazy("core:repair_list")
 
     def form_valid(self, form):
-        instrument = Instruments.objects.get(pk=self.kwargs["pk"])
+        instrument = get_object_or_404(Instruments, pk=self.kwargs["pk"])
+
+        if instrument.status == Instruments.STATUS_IN_REPAIR:
+            form.add_error(None, "Инструмент уже в ремонте")
+            return self.form_invalid(form)
+
         form.instance.instrument = instrument
-        form.instance.date_of_delivery_for_repair = timezone.now().date()
+        form.instance.date_of_delivery_for_repair = localdate()
+        instrument.send_to_repair()
         return super().form_valid(form)
 
