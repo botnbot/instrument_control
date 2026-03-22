@@ -1,2 +1,52 @@
-/.idea/
-/media/
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Build / distribution
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# SQLite / databases
+*.sqlite3
+*.db
+
+# Unit test / coverage
+.coverage
+.coverage.*
+.pytest_cache/
+htmlcov/
+
+# Type checkers
+.mypy_cache/
+.pyre/
+.pytype/
+
+# IDE
+.idea/
+poetry.lock
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Project-specific
+data/out/
