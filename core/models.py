@@ -3,9 +3,6 @@ from django.db import models
 from django.db.models import CASCADE
 
 
-# Create your models here.
-
-
 class Instruments(models.Model):
     STATUS_IN_USE = 'IN_USE'
     STATUS_IN_REPAIR = 'IN_REPAIR'
@@ -19,7 +16,7 @@ class Instruments(models.Model):
         (STATUS_BROKEN, "сломан"),
     ]
     name = models.CharField(max_length=100, verbose_name="Наименование")
-    inventory_number = models.IntegerField(
+    inventory_number = models.CharField(
         unique=True,
         null=True,
         blank=True,
@@ -33,6 +30,14 @@ class Instruments(models.Model):
     image3 = models.ImageField(upload_to="instruments/foto", verbose_name="Фото инструмента3", blank=True)
     comment = models.TextField(max_length=200, verbose_name="Комментарий")
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default=STATUS_IN_USE)
+
+    def send_to_repair(self):
+        self.status = self.STATUS_IN_REPAIR
+        self.save()
+
+    def mark_as_active(self):
+        self.status = self.STATUS_IN_USE
+        self.save()
 
     def __str__(self):
         return f"{self.name} ({self.inventory_number})"
@@ -63,14 +68,18 @@ class Repairs(models.Model):
                                       null=True, blank=True)
     comment = models.TextField(verbose_name="Комментарий")
 
+    class Meta:
+        ordering = ['-date_of_delivery_for_repair']
+
     @property
     def duration(self):
         if self.date_of_receipt_from_repair:
             return (self.date_of_receipt_from_repair - self.date_of_delivery_for_repair).days
         return None
 
-    class Meta:
-        ordering = ['-date_of_delivery_for_repair']
+    def complete_repair(self):
+        if self.date_of_receipt_from_repair:
+            self.instrument.mark_as_active()
 
 
 class Relocator(models.Model):
@@ -81,6 +90,10 @@ class Relocations(models.Model):
     instrument = models.ForeignKey(Instruments, on_delete=CASCADE, related_name='relocations')
     comment = models.TextField()
     date = models.DateField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def clean(self):
         if self.instrument.status == Instruments.STATUS_RELOCATED and not self.comment:
