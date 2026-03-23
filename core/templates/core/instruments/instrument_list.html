@@ -35,16 +35,22 @@
 
         </td>
         <td>{{ instrument.inventory_number }}</td>
-        <td>{{ instrument.entry_date }}</td>
+        <td>{{ instrument.entry_date|date:"d.m.Y" }}</td>
         <td>{{ instrument.price }}</td>
         <td>{{ instrument.comment }}</td>
-        <td>{{ instrument.status }}</td>
         <td>
-            {% if instrument.image1 %}
-            <img src="{{ instrument.image1.url }}" width="100">
-            {% endif %}
+    <span class="badge bg-{{ instrument.status_badge.1 }}">
+        {{ instrument.status_badge.0 }}
+    </span>
         </td>
         <td>
+            {% if instrument.image1 %}
+            <a href="{{ instrument.image1.url }}" target="_blank">
+                <img src="{{ instrument.image1.url }}" width="100">
+            </a>
+            {% endif %}
+        </td>
+        <td class="text-nowrap">
             <a href="{% url 'core:instrument_delete' instrument.pk %}" class="btn btn-danger btn-sm">
                 Списать
             </a>
