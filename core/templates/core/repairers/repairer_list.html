@@ -3,50 +3,62 @@
 
 {% block content %}
 
-<h1>Список сервисов</h1>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Сервисы</h2>
+    <a href="{% url 'core:repairer_create' %}" class="btn btn-success">
+        + Добавить сервис
+    </a>
+</div>
 
 <!-- Форма поиска -->
 <form method="get" class="d-flex mb-3" role="search">
     <input type="text" name="q" value="{{ request.GET.q }}"
-           class="form-control me-2" placeholder="Поиск по имени или инвентарному номеру">
+           class="form-control me-2" placeholder="Поиск по названию, контактному лицу или телефону">
     <button class="btn btn-outline-success" type="submit">Поиск</button>
 </form>
 
 {% if repairers %}
-<table class="table table-striped table-hover table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Название</th>
-            <th>Адрес</th>
-            <th>Телефон</th>
-            <th>Контактное лицо</th>
-            <th>Email</th>
-            <th>Комментарий</th>
-            <th>Действия</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for repairer in repairers %}
-        <tr>
-            <td>{{ repairer.pk }}</td>
-            <td>
-                <a href="{% url 'core:repairer_detail' repairer.pk %}" class="info-table-link">
-                    {{ repairer.name }}
-                </a>
-            </td>
-            <td>{{ repairer.address }}</td>
-            <td>{{ repairer.phone }}</td>
-            <td>{{ repairer.contact_person }}</td>
-            <td>{{ repairer.email }}</td>
-            <td>{{ repairer.comment }}</td>
-            <td>
-                <a href="{% url 'core:repairer_delete' repairer.pk %}" class="btn btn-danger btn-sm">Удалить</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-striped table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Адрес</th>
+                <th>Телефон</th>
+                <th>Контактное лицо</th>
+                <th>Email</th>
+                <th>Комментарий</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for repairer in repairers %}
+            <tr>
+                <td>{{ repairer.pk }}</td>
+                <td>
+                    <a href="{% url 'core:repairer_detail' repairer.pk %}" class="info-table-link">
+                        {{ repairer.name }}
+                    </a>
+                </td>
+                <td>{{ repairer.address }}</td>
+                <td>{{ repairer.phone }}</td>
+                <td>{{ repairer.contact_person }}</td>
+                <td><a href="mailto:{{ repairer.email }}">{{ repairer.email|default:"—" }}</a></td>
+                <td>{{ repairer.comment|default:"_" }}</td>
+                <td>
+                    <a href="{% url 'core:repairer_delete' repairer.pk %}"
+                       class="btn btn-danger btn-sm"><i
+                            class="bi bi-trash"></i
+                    > Удалить</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <!-- Пагинация -->
 {% if is_paginated %}
@@ -59,15 +71,15 @@
         {% endif %}
 
         {% for num in page_obj.paginator.page_range %}
-            {% if page_obj.number == num %}
-                <li class="page-item active">
-                    <span class="page-link">{{ num }}</span>
-                </li>
-            {% else %}
-                <li class="page-item">
-                    <a class="page-link" href="?q={{ request.GET.q }}&page={{ num }}">{{ num }}</a>
-                </li>
-            {% endif %}
+        {% if page_obj.number == num %}
+        <li class="page-item active">
+            <span class="page-link">{{ num }}</span>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="?q={{ request.GET.q }}&page={{ num }}">{{ num }}</a>
+        </li>
+        {% endif %}
         {% endfor %}
 
         {% if page_obj.has_next %}
@@ -83,8 +95,6 @@
 <p>Нет сервисов</p>
 {% endif %}
 
-<!-- Кнопки действий -->
 <a href="{% url 'core:repairer_list' %}" class="btn btn-secondary">На главную</a>
-<a href="{% url 'core:repairer_create' %}" class="btn btn-primary">Добавить</a>
 
 {% endblock %}
