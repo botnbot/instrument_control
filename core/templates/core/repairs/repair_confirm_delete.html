@@ -6,17 +6,15 @@
 
 {% block content %}
 
-<div class="container mt-5">
-    <h1 class="mb-4">Удалить ремонт</h1>
-    <p>Вы уверены, что хотите удалить ремонт"{{ object.id }}"?</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">
-            Удалить
-        </button>
-        <a href="{% url 'core:repair_list' %}" class="btn btn-secondary">
-            Отмена
-        </a>
-    </form>
+<div class="card">
+    <div class="card-body text-center">
+        <h2>Удалить ремонт: {{ object.id }}</h2>
+        <p>Вы уверены?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-lg">Удалить</button>
+            <a href="{% url 'core:repair_list' %}" class="btn btn-secondary btn-lg ms-2">Отмена</a>
+        </form>
+    </div>
 </div>
 {% endblock %}
