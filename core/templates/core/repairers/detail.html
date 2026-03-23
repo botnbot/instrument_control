@@ -2,37 +2,45 @@
 
 {% block content %}
 
-<h1>Сервис: {{ object.name }}</h1>
-
-<table class="table table-bordered table-striped">
-    <tr>
-        <th>Наименование</th>
-        <td>{{ object.name }}</td>
-    </tr>
-    <tr>
-        <th>Адрес</th>
-        <td>{{ object.address }}</td>
-    </tr>
-    <tr>
-        <th>Телефон</th>
-        <td>{{ object.phone}}</td>
-    </tr>
-    <tr>
-        <th>Контактное лицо</th>
-        <td>{{ object.contact_person }}</td>
-    </tr>
-    <tr>
-        <th>Email</th>
-        <td>{{ object.email }}</td>
-    </tr>
-    <tr>
-        <th>Комментарий</th>
-        <td>{{ object.comment }}</td>
-    </tr>
-</table>
-<br>
-<a href="{% url 'core:repairer_update' object.pk %}" class="btn btn-primary">Редактировать</a>
-<a href="{% url 'core:repairer_delete' object.pk %}" class="btn btn-danger">Удалить</a>
-<a href="{% url 'core:repairer_list' %}" class="btn btn-secondary">Вернуться к списку</a>
-
+<h1>Сервис: {{ repairer.name }}</h1>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Наименование</th>
+                <td>{{ repairer.name }}</td>
+            </tr>
+            <tr>
+                <th>Адрес</th>
+                <td>{{ repairer.address }}</td>
+            </tr>
+            <tr>
+                <th>Телефон</th>
+                <td>{{ repairer.phone}}</td>
+            </tr>
+            <tr>
+                <th>Контактное лицо</th>
+                <td>{{ repairer.contact_person }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td><a href="mailto:{{ repairer.email }}">{{ repairer.email }}</a></td>
+            </tr>
+            <tr>
+                <th>Комментарий</th>
+                <td>{{ repairer.comment|default:"—" }}</td>
+            </tr>
+        </table>
+        <br>
+        <a href="{% url 'core:repairer_update' repairer.pk %}" class="btn btn-primary">
+            <i class="bi bi-pencil-square"></i> Редактировать
+        </a>
+        <a href="{% url 'core:repairer_delete' repairer.pk %}" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Удалить
+        </a>
+        <a href="{% url 'core:repairer_list' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Вернуться к списку
+        </a>
+    </div>
+</div>
 {% endblock %}
