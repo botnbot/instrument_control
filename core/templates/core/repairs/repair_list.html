@@ -4,6 +4,7 @@
 {% block content %}
 
 <h1>Список ремонтов</h1>
+
 <!-- Форма поиска -->
 <form method="get" class="d-flex mb-3" role="search">
     <input type="text" name="q" value="{{ request.GET.q }}"
@@ -14,34 +15,54 @@
 {% if repairs %}
 <table class="table table-striped table-hover table-bordered">
     <thead>
-    <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Наименование инструмента</th>
-        <th scope="col">Исполнитель</th>
-        <th scope="col">Дата поломки</th>
-        <th scope="col">Дата сдачи в ремонт</th>
-        <th scope="col">Дата получения из ремонта</th>
-        <th scope="col">Стоимость ремонта</th>
-        <th scope="col">Комментарий</th>
-    </tr>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Наименование инструмента</th>
+            <th scope="col">Исполнитель</th>
+            <th scope="col">Дата поломки</th>
+            <th scope="col">Дата сдачи в ремонт</th>
+            <th scope="col">Дата получения из ремонта</th>
+            <th scope="col">Стоимость ремонта</th>
+            <th scope="col">Комментарий</th>
+            <th scope="col">Действия</th>
+        </tr>
     </thead>
     <tbody>
     {% for repair in repairs %}
-    <tr>
-        <td>{{ repair.pk }}</td>
-        <td><a href="{% url 'core:instrument_detail' repair.instrument.pk %}" class="info-table-link">{{ repair.instrument }}</a></td>
-        <td><a href="{% url 'core:repairer_detail' repair.repairer.pk %}" class="info-table-link">{{ repair.repairer }}</a></td>
-        <td>{{ repair.failure_date }}</td>
-        <td>{{ repair.date_of_delivery_for_repair }}</td>
-        <td>{{ repair.date_of_receipt_from_repair }}</td>
-        <td> {{ repair.repair_cost }}</td>
-        <td> {{ repair.comment }}</td>
-        <td>
-            <a href="{% url 'core:repair_delete' repair.pk %}" class="btn btn-danger">
-                Удалить
-            </a>
-        </td>
-    </tr>
+        <tr>
+            <td>{{ repair.pk }}</td>
+
+            <!-- Инструмент -->
+            <td>
+                {% if repair.instrument %}
+                <a href="{% url 'core:instrument_detail' repair.instrument.pk %}" class="info-table-link">
+                    {{ repair.instrument.name }}{% if repair.instrument.inventory_number %} (№{{ repair.instrument.inventory_number }}){% endif %}
+                </a>
+                {% else %}
+                —
+                {% endif %}
+            </td>
+
+            <!-- Исполнитель -->
+            <td>
+                {% if repair.repairer %}
+                <a href="{% url 'core:repairer_detail' repair.repairer.pk %}" class="info-table-link">
+                    {{ repair.repairer.name }}
+                </a>
+                {% else %}
+                —
+                {% endif %}
+            </td>
+
+            <td>{{ repair.failure_date|date:"d.m.Y" }}</td>
+            <td>{{ repair.date_of_delivery_for_repair|date:"d.m.Y" }}</td>
+            <td>{{ repair.date_of_receipt_from_repair|date:"d.m.Y"|default:"—" }}</td>
+            <td>{{ repair.repair_cost|default:"—" }} руб.</td>
+            <td>{{ repair.comment|default:"—" }}</td>
+            <td>
+                <a href="{% url 'core:repair_delete' repair.pk %}" class="btn btn-danger btn-sm">Удалить</a>
+            </td>
+        </tr>
     {% endfor %}
     </tbody>
 </table>
@@ -83,4 +104,5 @@
 
 <a href="{% url 'core:instrument_list' %}" class="btn btn-secondary">На главную</a>
 <a href="{% url 'core:repair_create' %}" class="btn btn-primary">Отправить в ремонт</a>
+
 {% endblock %}
