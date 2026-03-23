@@ -19,6 +19,18 @@ class RepairsForm(forms.ModelForm):
     class Meta:
         model = Repairs
         fields = "__all__"
+        widgets = {
+            'instrument': forms.Select(attrs={'class': 'form-select select2'}),
+            'failure_date': forms.DateInput(
+                attrs={'type': 'date', 'class': 'form-control'}
+            ),
+            'date_of_delivery_for_repair': forms.DateInput(
+                attrs={'type': 'date', 'class': 'form-control'}
+            ),
+            'date_of_receipt_from_repair': forms.DateInput(
+                attrs={'type': 'date', 'class': 'form-control'}
+            ),
+        }
 
 
 class RelocationsForm(forms.ModelForm):
