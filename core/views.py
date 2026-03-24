@@ -8,15 +8,31 @@ from django.views.generic import (
     ListView,
     DeleteView,
 )
+from rest_framework import viewsets
 
 from .forms import InstrumentsForm, RepairersForm, RepairsForm
 from .models import Instruments, Repairers, Repairs
 from django.views.generic import TemplateView
 
+from .serializers import InstrumentSerializer, RepairersSerializer, RepairsSerializer
+
 
 class HomeView(TemplateView):
     template_name = "home.html"
 
+
+# ________________________________REST ViewSets_____________________________________________
+class InstrumentsViewSet(viewsets.ModelViewSet):
+    serializer_class = InstrumentSerializer
+    queryset = Instruments.objects.all()
+
+class RepairersViewSet(viewsets.ModelViewSet):
+    queryset = Repairers.objects.all()
+    serializer_class = RepairersSerializer
+
+class RepairsViewSet(viewsets.ModelViewSet):
+    queryset = Repairs.objects.all()
+    serializer_class = RepairsSerializer
 
 # ________________________________Instruments_____________________________________________
 class InstrumentsCreateView(CreateView):
