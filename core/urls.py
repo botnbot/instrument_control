@@ -38,7 +38,7 @@ router.register('repairs', RepairsViewSet)
 urlpatterns = [
     path("", HomeView.as_view(), name="home"),
 
-    path("instruments/", InstrumentsListView.as_view(), name="instrument_list"),
+    path("instruments/", InstrumentsListView.as_view(), name="instruments_list"),
     path(
         "instruments/create/", InstrumentsCreateView.as_view(), name="instrument_create"
     ),
