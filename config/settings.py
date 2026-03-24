@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "core",
     "users",
     'widget_tweaks',
+    'rest_framework',
+    'simplejwt'
 
 ]
 
