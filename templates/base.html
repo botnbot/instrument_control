@@ -27,7 +27,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
-        <a class="navbar-brand btn btn-primary" href="{% url 'core:instrument_list' %}">
+        <a class="navbar-brand btn btn-primary" href="{% url 'core:home' %}">
             <strong>СМН</strong>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -39,12 +39,12 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'core:instrument_list' %}">
+                    <a class="nav-link" href="{% url 'core:instruments_list' %}">
                         <i class="bi bi-tools"></i> Инструменты
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle"  data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="bi bi-wrench"></i> Ремонты
                     </a>
                     <ul class="dropdown-menu">
@@ -64,7 +64,7 @@
             </ul>
 
             <!-- Поиск по инструментам -->
-            <form class="d-flex" method="get" action="{% url 'core:instrument_list' %}">
+            <form class="d-flex" method="get" action="{% url 'core:instruments_list' %}">
                 <input class="form-control me-2" type="search" name="q"
                        placeholder="Поиск инструмента..." value="{{ request.GET.q }}">
                 <button class="btn btn-outline-light" type="submit">

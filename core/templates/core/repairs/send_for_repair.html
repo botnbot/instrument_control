@@ -1,18 +1,37 @@
 {% extends "base.html" %}
 
+{% load widget_tweaks %}
+
 {% block content %}
-<h2>Отправить инструмент в ремонт</h2>
-<form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-    <div class="mb-3">
-        <label class="form-label">{{ field.label }}</label>
-        {{ field }}
-        {% if field.errors %}
-        <div class="text-danger">{{ field.errors }}</div>
-        {% endif %}
-    </div>
-    {% endfor %}
-    <button type="submit">Сохранить</button>
-</form>
+<div class="container mt-4">
+    <h2>Отправить инструмент в ремонт</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="mb-3">
+            <label class="form-label">{{ field.label }}</label>
+
+            {# Добавляем классы Bootstrap к полям #}
+            {% if field|attr:"type" == "date" %}
+                {{ field|add_class:"form-control" }}
+            {% elif field|attr:"widget_type" == "select" %}
+                {{ field|add_class:"form-select" }}
+            {% else %}
+                {{ field|add_class:"form-control" }}
+            {% endif %}
+
+            {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+            {% endif %}
+
+            {% if field.errors %}
+            <div class="text-danger">{{ field.errors }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="{% url 'core:instruments_list' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
 {% endblock %}

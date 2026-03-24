@@ -8,22 +8,34 @@ from django.views.generic import (
     ListView,
     DeleteView,
 )
+from rest_framework import viewsets
 
 from .forms import InstrumentsForm, RepairersForm, RepairsForm
 from .models import Instruments, Repairers, Repairs
 from django.views.generic import TemplateView
 
+from .serializers import InstrumentSerializer, RepairersSerializer, RepairsSerializer
 
-class HomeView(TemplateView):
-    template_name = "home.html"
+# ________________________________REST ViewSets_____________________________________________
 
+class InstrumentsViewSet(viewsets.ModelViewSet):
+    serializer_class = InstrumentSerializer
+    queryset = Instruments.objects.all()
+
+class RepairersViewSet(viewsets.ModelViewSet):
+    queryset = Repairers.objects.all()
+    serializer_class = RepairersSerializer
+
+class RepairsViewSet(viewsets.ModelViewSet):
+    queryset = Repairs.objects.all()
+    serializer_class = RepairsSerializer
 
 # ________________________________Instruments_____________________________________________
 class InstrumentsCreateView(CreateView):
     model = Instruments
     form_class = InstrumentsForm
     template_name = "core/instruments/instruments_form.html"
-    success_url = reverse_lazy("core:instrument_list")
+    success_url = reverse_lazy("core:instruments_list")
 
 
 class InstrumentsDetailView(DetailView):
@@ -34,7 +46,7 @@ class InstrumentsDetailView(DetailView):
 
 class InstrumentsListView(ListView):
     model = Instruments
-    template_name = "core/instruments/instrument_list.html"
+    template_name = "core/instruments/instruments_list.html"
     context_object_name = "instruments"
     paginate_by = 10
 
@@ -61,7 +73,7 @@ class InstrumentsUpdateView(UpdateView):
 class InstrumentsDeleteView(DeleteView):
     model = Instruments
     template_name = "core/instruments/instruments_confirm_delete.html"
-    success_url = reverse_lazy("core:instrument_list")
+    success_url = reverse_lazy("core:instruments_list")
 
 
 # ________________________________Repairers_____________________________________________
@@ -90,12 +102,12 @@ class RepairersListView(ListView):
 
         if search_query:
             qs = qs.filter(
-                Q(name__icontains=search_query)
-                |Q(contact_person__icontains=search_query)
-                |Q(phone__icontains=search_query)
-            )
+                Q(name__icontains=search_query) |
+                Q(contact_person__icontains=search_query) |
+                Q(phone__icontains=search_query)
+            ).distinct()
 
-        return qs.distinct()
+        return qs
 
 
 class RepairersUpdateView(UpdateView):
@@ -134,6 +146,17 @@ class RepairsListView(ListView):
     context_object_name = "repairs"
     paginate_by = 10
 
+    def get_queryset(self):
+        qs = super().get_queryset().select_related('instrument', 'repairer')
+        search_query = self.request.GET.get("q", "").strip()
+
+        if search_query:
+            qs = qs.filter(
+                Q(instrument__name__icontains=search_query) |
+                Q(repairer__name__icontains=search_query)
+            ).distinct()
+        return qs
+
 
 class RepairsUpdateView(UpdateView):
     model = Repairs
@@ -161,3 +184,27 @@ class SendForRepairView(CreateView):
         form.instance.instrument = instrument
         form.instance.date_of_delivery_for_repair = timezone.now().date()
         return super().form_valid(form)
+
+
+# ________________________________HomeView____________________________________________
+
+class HomeView(TemplateView):
+    template_name = "home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        instruments = Instruments.objects.prefetch_related("repairs")
+
+        data = []
+        for inst in instruments:
+            total = sum(r.duration or 0 for r in inst.repairs.all())
+            data.append({
+                "instrument": inst,
+                "total_days": total
+            })
+
+        top5 = sorted(data, key=lambda x: x["total_days"], reverse=True)[:5]
+
+        context["top_instruments"] = top5
+        return context
