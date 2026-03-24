@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import CASCADE
+from django.utils.duration import duration_string
 
 
 class Instruments(models.Model):
@@ -15,7 +16,7 @@ class Instruments(models.Model):
         (STATUS_RELOCATED, "перемещен"),
         (STATUS_BROKEN, "сломан"),
     ]
-    external_id = models.CharField(max_length=100, null=True, blank=True)
+    external_id = models.CharField(max_length=100, null=True, blank=True, unique=True)
     name = models.CharField(max_length=100, verbose_name="Наименование")
     inventory_number = models.IntegerField(
         unique=True,
@@ -57,7 +58,7 @@ class Instruments(models.Model):
 
 
 class Repairers(models.Model):
-    external_id = models.CharField(max_length=100, null=True, blank=True)
+    external_id = models.CharField(max_length=100, null=True, blank=True, unique=True)
     name = models.CharField(max_length=100, verbose_name="Название")
     address = models.CharField(max_length=300, verbose_name="Адрес", null=True, blank=True)
     phone = models.CharField(max_length=20, verbose_name="Телефон")
@@ -71,7 +72,7 @@ class Repairers(models.Model):
 
 
 class Repairs(models.Model):
-    external_id = models.CharField(max_length=100, null=True, blank=True)
+    external_id = models.CharField(max_length=100, null=True, blank=True, unique=True)
     instrument = models.ForeignKey(
         Instruments,
         on_delete=models.CASCADE,
@@ -107,6 +108,13 @@ class Repairs(models.Model):
                 self.date_of_receipt_from_repair - self.date_of_delivery_for_repair
             ).days
         return None
+
+    @property
+    def total_repair_duration(self):
+        return sum(
+            r.duration or 0 for r in self.repairs.all()
+        )
+
 
     class Meta:
         ordering = ["-date_of_delivery_for_repair"]
