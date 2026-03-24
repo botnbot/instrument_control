@@ -177,3 +177,30 @@ class SendForRepairView(CreateView):
         form.instance.instrument = instrument
         form.instance.date_of_delivery_for_repair = timezone.now().date()
         return super().form_valid(form)
+
+
+# ________________________________HomeView____________________________________________
+from django.views.generic import TemplateView
+from core.models import Instruments
+
+
+class HomeView(TemplateView):
+    template_name = "home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        instruments = Instruments.objects.prefetch_related("repairs")
+
+        data = []
+        for inst in instruments:
+            total = sum(r.duration or 0 for r in inst.repairs.all())
+            data.append({
+                "instrument": inst,
+                "total_days": total
+            })
+
+        top5 = sorted(data, key=lambda x: x["total_days"], reverse=True)[:5]
+
+        context["top_instruments"] = top5
+        return context
