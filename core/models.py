@@ -15,6 +15,7 @@ class Instruments(models.Model):
         (STATUS_RELOCATED, "перемещен"),
         (STATUS_BROKEN, "сломан"),
     ]
+    external_id = models.CharField(max_length=100, null=True, blank=True)
     name = models.CharField(max_length=100, verbose_name="Наименование")
     inventory_number = models.IntegerField(
         unique=True,
@@ -56,11 +57,13 @@ class Instruments(models.Model):
 
 
 class Repairers(models.Model):
+    external_id = models.CharField(max_length=100, null=True, blank=True)
     name = models.CharField(max_length=100, verbose_name="Название")
     address = models.CharField(max_length=300, verbose_name="Адрес", null=True, blank=True)
     phone = models.CharField(max_length=20, verbose_name="Телефон")
     contact_person = models.CharField(max_length=100, verbose_name="Контактное лицо", null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
+    company_details = models.CharField(max_length=100, blank=True, verbose_name="Реквизиты")
     comment = models.CharField(max_length=300, verbose_name="Коментарий", null=True, blank=True)
 
     def __str__(self):
@@ -68,6 +71,7 @@ class Repairers(models.Model):
 
 
 class Repairs(models.Model):
+    external_id = models.CharField(max_length=100, null=True, blank=True)
     instrument = models.ForeignKey(
         Instruments,
         on_delete=models.CASCADE,
@@ -113,6 +117,7 @@ class Relocator(models.Model):
 
 
 class Relocations(models.Model):
+    external_id = models.CharField(max_length=100, null=True, blank=True)
     instrument = models.ForeignKey(
         Instruments, on_delete=CASCADE, related_name="relocations"
     )
