@@ -1,8 +1,8 @@
 from django.contrib.auth import admin
-from user.models import Users
+from users.models import Users
 
 
 @admin.register(Users)
-class UsersAdmin(admin.modelAdmin):
+class UsersAdmin(admin.ModelAdmin):
     list_display = ("name",)
     search_fields = ("name",)
