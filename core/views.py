@@ -8,13 +8,13 @@ from django.views.generic import (
     ListView,
     DeleteView,
 )
+from django.views.generic import TemplateView
 from rest_framework import viewsets
 
 from .forms import InstrumentsForm, RepairersForm, RepairsForm
 from .models import Instruments, Repairers, Repairs
-from django.views.generic import TemplateView
-
 from .serializers import InstrumentSerializer, RepairersSerializer, RepairsSerializer
+
 
 # ________________________________REST ViewSets_____________________________________________
 
@@ -137,7 +137,7 @@ class RepairsCreateView(CreateView):
 class RepairsDetailView(DetailView):
     model = Repairs
     template_name = "core/repairs/detail.html"
-    context_object_name = "repairs"
+    context_object_name = "repair"
 
 
 class RepairsListView(ListView):
