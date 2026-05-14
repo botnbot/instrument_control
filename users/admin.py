@@ -7,4 +7,4 @@ from users.models import User
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     list_display = ("username", "email", "is_staff")
-    search_fields = ("username","email")
+    search_fields = ("username", "email")

@@ -15,20 +15,23 @@ from .forms import InstrumentsForm, RepairersForm, RepairsForm
 from .models import Instruments, Repairers, Repairs
 from .serializers import InstrumentSerializer, RepairersSerializer, RepairsSerializer
 
-
 # ________________________________REST ViewSets_____________________________________________
+
 
 class InstrumentsViewSet(viewsets.ModelViewSet):
     serializer_class = InstrumentSerializer
     queryset = Instruments.objects.all()
 
+
 class RepairersViewSet(viewsets.ModelViewSet):
     queryset = Repairers.objects.all()
     serializer_class = RepairersSerializer
 
+
 class RepairsViewSet(viewsets.ModelViewSet):
     queryset = Repairs.objects.all()
     serializer_class = RepairsSerializer
+
 
 # ________________________________Instruments_____________________________________________
 class InstrumentsCreateView(CreateView):
@@ -102,9 +105,9 @@ class RepairersListView(ListView):
 
         if search_query:
             qs = qs.filter(
-                Q(name__icontains=search_query) |
-                Q(contact_person__icontains=search_query) |
-                Q(phone__icontains=search_query)
+                Q(name__icontains=search_query)
+                | Q(contact_person__icontains=search_query)
+                | Q(phone__icontains=search_query)
             ).distinct()
 
         return qs
@@ -147,13 +150,13 @@ class RepairsListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        qs = super().get_queryset().select_related('instrument', 'repairer')
+        qs = super().get_queryset().select_related("instrument", "repairer")
         search_query = self.request.GET.get("q", "").strip()
 
         if search_query:
             qs = qs.filter(
-                Q(instrument__name__icontains=search_query) |
-                Q(repairer__name__icontains=search_query)
+                Q(instrument__name__icontains=search_query)
+                | Q(repairer__name__icontains=search_query)
             ).distinct()
         return qs
 
@@ -188,6 +191,7 @@ class SendForRepairView(CreateView):
 
 # ________________________________HomeView____________________________________________
 
+
 class HomeView(TemplateView):
     template_name = "home.html"
 
@@ -199,10 +203,7 @@ class HomeView(TemplateView):
         data = []
         for inst in instruments:
             total = sum(r.duration or 0 for r in inst.repairs.all())
-            data.append({
-                "instrument": inst,
-                "total_days": total
-            })
+            data.append({"instrument": inst, "total_days": total})
 
         top5 = sorted(data, key=lambda x: x["total_days"], reverse=True)[:5]
 
