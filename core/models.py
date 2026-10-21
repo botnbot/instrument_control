@@ -75,5 +75,5 @@ class Relocations(models.Model):
     date = models.DateField(auto_now_add=True)
 
     def clean(self):
-        if self.instrument.status == "relocated" and not self.comment:
+        if self.Instruments.STATUS_RELOCATED == True and not self.comment:
             raise ValidationError("Нужно указать комментарий для перемещенного инструмента")
