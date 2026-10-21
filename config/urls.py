@@ -19,9 +19,12 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from user.views import rfid_login_view
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',  include('core.urls')),
+    path('login/', rfid_login_view, name='rfid_login'),
 ]
 
 
