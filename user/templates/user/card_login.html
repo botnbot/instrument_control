@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">Вход в систему</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted text-center">Приложите карту к считывателю</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.rfid_card.label_tag }}
+                        {{ form.rfid_card }}
+                        {% if form.rfid_card.errors %}
+                            <div class="text-danger">{{ form.rfid_card.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Войти</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Автоматически отправляем форму, когда считыватель "печатает" номер и нажимает Enter
+    document.getElementById('id_rfid_card').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            this.form.submit();
+        }
+    });
+</script>
+{% endblock %}
