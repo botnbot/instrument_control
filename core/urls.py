@@ -15,38 +15,33 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-
-from core.views import (
-    InstrumentsListView,
-    InstrumentsCreateView,
-    InstrumentsDetailView,
-    InstrumentsUpdateView,
-    InstrumentsDeleteView,
-    RepairersCreateView,
-    RepairsCreateView,
-    RepairsListView,
-    RepairersListView,
-)
+from . import views
 
 app_name = 'core'
 
-
 urlpatterns = [
-    path('instruments/', InstrumentsListView.as_view(), name='instrument_list'),
-    path('instruments/create/', InstrumentsCreateView.as_view(), name='instrument_create'),
-    path('instruments/<int:pk>/', InstrumentsDetailView.as_view(), name='instrument_detail'),
-    path('instruments/<int:pk>/update/', InstrumentsUpdateView.as_view(), name='instrument_update'),
-    path('instruments/<int:pk>/delete/', InstrumentsDeleteView.as_view(), name='instrument_delete'),
+    # Главная страница — список инструментов
+    path('', views.InstrumentListView.as_view(), name='instrument_list'),
 
-    path('repairers/', RepairersListView.as_view(), name='repairers_list'),
-    path('repairers/create/', RepairersCreateView.as_view(), name='repairers_create'),
-    # path('repairers/<int:pk>/', RepairersDetailView.as_view(), name='repairers_detail'),
-    # path('repairers/<int:pk>/update/', RepairersUpdateView.as_view(), name='repairers_update'),
-    # path('repairers/<int:pk>/delete/', RepairersDeleteView.as_view(), name='repairers_delete'),
+    # Инструменты
+    path('instruments/create/', views.InstrumentCreateView.as_view(), name='instrument_create'),
+    path('instruments/<int:pk>/', views.InstrumentDetailView.as_view(), name='instrument_detail'),
+    path('instruments/<int:pk>/update/', views.InstrumentUpdateView.as_view(), name='instrument_update'),
+    path('instruments/<int:pk>/delete/', views.InstrumentDeleteView.as_view(), name='instrument_delete'),
 
-    path('repairs/', RepairsListView.as_view(), name='repairs_list'),
-    path('repairs/create/', RepairsCreateView.as_view(), name='repairs_create'),
-    # path('repairs/<int:pk>/', RepairsDetailView.as_view(), name='repairs_detail'),
-    # path('repairs/<int:pk>/update/', RepairsUpdateView.as_view(), name='repairs_update'),
-    # path('repairs/<int:pk>/delete/', RepairsDeleteView.as_view(), name='repairs_delete'),
+    # Ремонтники
+    path('repairers/', views.RepairerListView.as_view(), name='repairer_list'),
+    path('repairers/create/', views.RepairerCreateView.as_view(), name='repairer_create'),
+    path('repairers/<int:pk>/', views.RepairerDetailView.as_view(), name='repairer_detail'),
+    path('repairers/<int:pk>/update/', views.RepairerUpdateView.as_view(), name='repairer_update'),
+
+    # Ремонты
+    path('repairs/', views.RepairListView.as_view(), name='repair_list'),
+    path('repairs/create/', views.RepairCreateView.as_view(), name='repair_create'),
+    path('repairs/<int:pk>/', views.RepairDetailView.as_view(), name='repair_detail'),
+    path('repairs/<int:pk>/update/', views.RepairUpdateView.as_view(), name='repair_update'),
+
+    # Перемещения
+    path('relocations/', views.RelocationListView.as_view(), name='relocation_list'),
+    path('relocations/create/', views.RelocationCreateView.as_view(), name='relocation_create'),
 ]
