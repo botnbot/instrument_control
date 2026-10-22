@@ -117,3 +117,10 @@ AUTHENTICATION_BACKENDS = [
     'user.backends.RFIDBackend',
     'django.contrib.auth.backends.ModelBackend', # оставляем для входа по паролю
 ]
+
+# Куда перенаправлять неавторизованных пользователей
+LOGIN_URL = 'rfid_login'
+# Куда перенаправлять после успешного входа
+LOGIN_REDIRECT_URL = 'core:instrument_list'
+# Куда перенаправлять после выхода
+LOGOUT_REDIRECT_URL = 'core:instrument_list'

@@ -22,11 +22,12 @@
     <!-- Навигационное меню -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand" href="/">Instrument Control</a>
+            <a class="navbar-brand" href="{% url 'core:instrument_list' %}">Instrument Control</a>
             <div class="navbar-nav">
-                <a class="nav-link" href="{% url 'instrument_list' %}">Инструменты</a>
-                <a class="nav-link" href="{% url 'repairers_list' %}">Ремонтники</a>
-                <a class="nav-link" href="{% url 'repairs_list' %}">Ремонты</a>
+                <a class="nav-link" href="{% url 'core:instrument_list' %}">Инструменты</a>
+                <a class="nav-link" href="{% url 'core:repairer_list' %}">Ремонтники</a>
+                <a class="nav-link" href="{% url 'core:repair_list' %}">Ремонты</a>
+                <a class="nav-link" href="{% url 'core:relocation_list' %}">Перемещения</a>
                 <a class="nav-link" href="/admin/">Админка</a>
             </div>
         </div>
