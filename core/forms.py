@@ -1,28 +1,28 @@
 from django import forms
 
-from core.models import Instruments, Repairs, Repairers,  Relocations
+from core.models import Instrument, Repair, Repairer,  Relocation
 
 
-class InstrumentsForm(forms.ModelForm):
+class InstrumentForm(forms.ModelForm):
     class Meta:
-        model = Instruments
+        model = Instrument
         fields = '__all__'
 
 
-class RepairersForm(forms.ModelForm):
+class RepairerForm(forms.ModelForm):
     class Meta:
-        model = Repairers
+        model = Repairer
         fields = '__all__'
 
 
-class RepairsForm(forms.ModelForm):
+class RepairForm(forms.ModelForm):
     class Meta:
-        model = Repairs
+        model = Repair
         fields = '__all__'
 
 
-class RelocationsForm(forms.ModelForm):
+class RelocationForm(forms.ModelForm):
     class Meta:
-        model = Relocations
+        model = Relocation
         fields = '__all__'
 
