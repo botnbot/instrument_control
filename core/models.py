@@ -1,14 +1,8 @@
 
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import PROTECT, ForeignKey
-from django.db.models import CASCADE
 
-
-# Create your models here.
-
-
-class Instruments(models.Model):
+class Instrument(models.Model):
     STATUS_IN_USE = 'IN_USE'
     STATUS_REPAIRED = 'REPAIRED'
     STATUS_RELOCATED = 'RELOCATED'
@@ -21,59 +15,69 @@ class Instruments(models.Model):
         (STATUS_BROKEN, "сломан"),
     ]
     name = models.CharField(max_length=100, verbose_name="Наименование")
-    entry_date = models.DateField(verbose_name="Дата ввода")
+    inventory_N = models.CharField(max_length=50, unique=True, verbose_name="Инвентарный номер")
+    entry_date = models.DateField(verbose_name="Дата ввода в эксплуатацию")
     price = models.DecimalField(decimal_places=2, max_digits=8, verbose_name="Цена")
     is_new=models.BooleanField(default=True)
     image1 = models.ImageField(upload_to="instruments/foto", verbose_name="Фото инструмента1")
-    image2 = models.ImageField(upload_to="instruments/foto", verbose_name="Фото инструмента2", blank=True)
-    image3 = models.ImageField(upload_to="instruments/foto", verbose_name="Фото инструмента3", blank=True)
-    comment = models.TextField(max_length=200, verbose_name="Комментарий")
-    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default=STATUS_IN_USE)
+    image2 = models.ImageField(upload_to="instruments/foto", verbose_name="Фото инструмента2", blank=True, null=True)
+    image3 = models.ImageField(upload_to="instruments/foto", verbose_name="Фото инструмента3", blank=True,  null=True)
+    comment = models.TextField(max_length=200, blank=True, null=True, verbose_name="Комментарий")
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default=STATUS_IN_USE, verbose_name="Статус")
 
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Инструмент'
+        verbose_name_plural = 'Инструменты'
+        ordering = ['entry_date']
 
-class Repairers(models.Model):
+class Repairer(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название")
     address = models.CharField(max_length=300, verbose_name="Адрес")
     phone = models.CharField(max_length=20, verbose_name="Телефон")
     contact_person = models.CharField(max_length=100, verbose_name="Контактное лицо")
     email = models.EmailField()
-    comment = models.CharField(max_length=300, verbose_name="Коментарий")
+    comment = models.CharField(max_length=300, verbose_name="Коментарий", blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Исполнитель'
 
     def __str__(self):
         return self.name
 
 
-class Repairs(models.Model):
+class Repair(models.Model):
 
-    instrument = models.ForeignKey(Instruments, on_delete=models.CASCADE, related_name='repairs', verbose_name='инструмент', null=True,
+    instrument = models.ForeignKey(Instrument, on_delete=models.CASCADE, related_name='repairs', verbose_name='инструмент', null=True,
     blank=True)
-    repairer = models.ForeignKey(Repairers, on_delete=models.PROTECT, related_name='repair_done', verbose_name='исполнитель')
+    repairer = models.ForeignKey(Repairer, on_delete=models.PROTECT, related_name='repair_done', verbose_name='исполнитель')
     failure_date = models.DateField(verbose_name='Дата поломки')
     date_of_delivery_for_repair = models.DateField(verbose_name="Дата сдачи в ремонт")
     date_of_receipt_from_repair = models.DateField(blank=True, null=True, verbose_name="Дата получения из ремонта")
-    repair_cost = models.DecimalField(decimal_places=2, max_digits=10, verbose_name="Стоимость ремонта")
-    comment = models.TextField(verbose_name="Комментарий")
+    repair_cost = models.DecimalField(decimal_places=2, max_digits=10, verbose_name="Стоимость ремонта", blank=True, null=True)
+    comment = models.TextField(verbose_name="Комментарий", blank=True, null=True)
 
     @property
     def duration(self):
         if self.date_of_receipt_from_repair:
             return (self.date_of_receipt_from_repair - self.date_of_delivery_for_repair).days
-        return None
 
 
+#
+#
+# class Relocator(models.Model):
+#     verbose_name = 'Переместивший'
+#     pass
 
-class Relocator(models.Model):
-    pass
 
-
-class Relocations(models.Model):
-    instrument = models.ForeignKey(Instruments, on_delete=CASCADE, related_name='relocations')
-    comment = models.CharField(max_length=255)
+class Relocation(models.Model):
+    instrument = models.ForeignKey(Instrument, on_delete=models.PROTECT, related_name='relocations', verbose_name="Инструмент")
+    comment = models.CharField(max_length=255, blank=True, null=True)
+    location = models.CharField(max_length=255)
     date = models.DateField(auto_now_add=True)
 
     def clean(self):
-        if self.Instruments.STATUS_RELOCATED == True and not self.comment:
+        if self.instrument.status == Instrument.STATUS_RELOCATED and not self.comment:
             raise ValidationError("Нужно указать комментарий для перемещенного инструмента")
