@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from core.models import Instrument, Repairer, Repair, Relocation
 
 
@@ -30,8 +31,6 @@ class RepairAdmin(admin.ModelAdmin):
     def duration_display(self, obj):
         return obj.duration
 
-
-# ДОБАВЛЕНА МОДЕЛЬ ПЕРЕМЕЩЕНИЙ
 @admin.register(Relocation)
 class RelocationAdmin(admin.ModelAdmin):
     list_display = ('instrument', 'location', 'date', 'comment')
