@@ -1,43 +1,71 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    {% load static %}
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Instrument Control{% endblock %}</title>
-    <!-- Подключаем Bootstrap -->
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <style>
-        .info-table-link {
-            color: black;
-            text-decoration: none;
-        }
-        .info-table-link:hover {
-            text-decoration: underline;
-            color: black;
-        }
-    </style>
+    <title>{% block title %}Учёт инструментов{% endblock %}</title>
+    <!-- Подключаем локальный Bootstrap -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
 </head>
 <body>
-    <!-- Навигационное меню -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'core:instrument_list' %}">Instrument Control</a>
-            <div class="navbar-nav">
-                <a class="nav-link" href="{% url 'core:instrument_list' %}">Инструменты</a>
-                <a class="nav-link" href="{% url 'core:repairer_list' %}">Ремонтники</a>
-                <a class="nav-link" href="{% url 'core:repair_list' %}">Ремонты</a>
-                <a class="nav-link" href="{% url 'core:relocation_list' %}">Перемещения</a>
-                <a class="nav-link" href="/admin/">Админка</a>
+            <a class="navbar-brand" href="{% url 'core:instrument_list' %}">🛠️ Instrument Control</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'core:instrument_list' %}">Инструменты</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'core:repairer_list' %}">Ремонтники</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'core:repair_list' %}">Ремонты</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'core:relocation_list' %}">Перемещения</a></li>
+                </ul>
+
+                <!-- Блок с информацией о пользователе -->
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <span class="navbar-text text-warning me-3">
+                                <!-- Выводим Имя и Фамилию. Если они пустые, выводим username -->
+                                Вы вошли как: <strong>{{ user.first_name|default:user.username }} {{ user.last_name }}</strong>
+                            </span>
+                        </li>
+                        <li class="nav-item">
+    <form method="post" action="{% url 'logout' %}" class="d-inline">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{% url 'core:instrument_list' %}">
+        <button type="submit" class="btn btn-link nav-link" style="display:inline; cursor:pointer;">Выйти</button>
+    </form>
+</li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'rfid_login' %}">Войти по карте</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Основной контент -->
-    <div class="container mt-4">
+    <div class="container">
+        <!-- Сообщения об успехе/ошибке -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-2">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
         {% block content %}
         {% endblock %}
     </div>
 
+    <!-- Подключаем локальный JS Bootstrap (если он у вас есть) -->
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
