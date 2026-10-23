@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
-{% block title %}Список инструмента{% endblock %}
-
+{% block title %}Список инструментов{% endblock %}
 
 {% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Список инструмента</h1>
+    {% if user.is_authenticated %}
+        <a href="{% url 'core:instrument_create' %}" class="btn btn-success">+ Добавить инструмент</a>
+    {% endif %}
+</div>
 
-<h1>Список инструмента</h1>
 {% if instruments %}
-<table class="table table-striped">
-    <thead>
+<table class="table table-striped table-hover align-middle">
+    <thead class="table-dark">
     <tr>
         <th scope="col">ID</th>
         <th scope="col">Наименование</th>
@@ -16,29 +20,53 @@
         <th scope="col">Комментарий</th>
         <th scope="col">Статус</th>
         <th scope="col">Фото</th>
+        <th scope="col">Действия</th> <!-- ДОБАВЛЕНА КОЛОНКА -->
     </tr>
     </thead>
     <tbody>
     {% for instrument in instruments %}
     <tr>
         <td>{{ instrument.id }}</td>
-        <td>{{ instrument.name }}</td>
-        <td>{{ instrument.entry_date }}</td>
-        <td>{{ instrument.price }}</td>
-        <td>{{ instrument.comment }}</td>
-        <td>{{ instrument.status }}</td>
-        <td> {% if instrument.image1 %}
-            <img src='{{instrument.image1.url}}' width='100'>
-            {%endif%}
+        <td><a href="{% url 'core:instrument_detail' instrument.pk %}">{{ instrument.name }}</a></td>
+        <td>{{ instrument.entry_date|date:"d.m.Y" }}</td>
+        <td>{{ instrument.price }} ₽</td>
+        <td>{{ instrument.comment|default:"—" }}</td>
+        <td>
+            {% if instrument.status == 'IN_USE' %}<span class="badge bg-success">{{ instrument.get_status_display }}</span>
+            {% elif instrument.status == 'IN_REPAIR' %}<span class="badge bg-warning text-dark">{{ instrument.get_status_display }}</span>
+            {% elif instrument.status == 'RELOCATED' %}<span class="badge bg-info text-dark">{{ instrument.get_status_display }}</span>
+            {% else %}<span class="badge bg-danger">{{ instrument.get_status_display }}</span>{% endif %}
+        </td>
+        <td>
+            {% if instrument.image1 %}
+                <img src="{{ instrument.image1.url }}" width="60" class="rounded">
+            {% else %}
+                <span class="text-muted">Нет</span>
+            {% endif %}
+        </td>
+        <!-- ЯЧЕЙКА С ДЕЙСТВИЯМИ -->
+        <td>
+            {% if user.is_authenticated %}
+                <a href="{% url 'core:instrument_update' instrument.pk %}" class="btn btn-sm btn-outline-primary">Редактировать</a>
+                <a href="{% url 'core:instrument_delete' instrument.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+
+                <!-- Быстрое перемещение -->
+                <form method="post" action="{% url 'core:relocation_create' %}" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="instrument" value="{{ instrument.pk }}">
+                    <button type="submit" class="btn btn-sm btn-outline-info">Переместить</button>
+                </form>
+            {% else %}
+                <span class="text-muted">Только просмотр</span>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
 {% else %}
-<p>Нет инструмента</p>
+<div class="alert alert-info">Нет инструмента</div>
 {% endif %}
 
-<a href="{% url 'core:instrument_list' %}" class="btn btn-secondary">На главную</a>
-<a href="{% url 'core:instrument_list' %}" class="btn btn-secondary">На главную</a>
+<!--<a href="{% url 'core:instrument_list' %}" class="btn btn-secondary mt-3">На главную</a>-->
 {% endblock %}
