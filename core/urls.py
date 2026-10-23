@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
+
 from . import views
 
 app_name = 'core'
@@ -22,6 +23,7 @@ app_name = 'core'
 urlpatterns = [
     # Главная страница — список инструментов
     path('', views.InstrumentListView.as_view(), name='instrument_list'),
+    path('api/search-instruments/', views.search_instruments, name='search_instruments'),
 
     # Инструменты
     path('instruments/create/', views.InstrumentCreateView.as_view(), name='instrument_create'),
